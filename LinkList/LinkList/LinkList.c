@@ -774,43 +774,65 @@ ComplexNode* BuyComplexNode(DataType x)
 	node->_data = x;
 	return node;
 }
-ComplexNode* CopyList(ComplexNode** list)
+
+
+
+ComplexNode* CopyList(ComplexNode* plist)
 {
-	ComplexNode* cur = NULL;
-	ComplexNode* newnode = NULL;
+	ComplexNode* cur = plist;
+	ComplexNode* tmep = NULL;
 	ComplexNode* newlist = NULL;
-	if (*list == NULL)
-		return NULL;
-	//复制相同节点并插在后面
-	cur = *list;
-	while (cur)
+	//创建结点
+	while (cur != NULL)
 	{
-		newnode = BuyComplexNode(cur->_data);
-		newnode->_next = cur->_next;
+		ComplexNode* tmp = cur->_next;
+		ComplexNode* newnode = BuyComplexNode(cur->_data);
+		assert(newnode);
+		newnode->_next = tmp;
 		cur->_next = newnode;
-		cur = newnode->_next;
+		cur = tmp;
 	}
-	//将随机域赋值
-	while (cur)
+	//②复制random域
+	cur = plist;
+	while (cur != NULL)
 	{
-		newnode = cur->_next;
-		if (cur->_random)
-		{
-			newnode->_random = cur->_random->_next;
-		}
-		cur = newnode->_next;
+		tmep = cur->_next;
+		if (cur->_random != NULL)
+			tmep->_random = cur->_random->_next;
+		cur = tmep->_next;
 	}
-	//分离
-	cur = *list;
-	newlist = (*list)->_next;
-	while (cur->_next)
+	//③拆除链表
+	cur = plist;
+	tmep = cur->_next;
+	newlist = tmep;
+	while (cur != NULL)
 	{
-		newnode = cur->_next;
-		cur->_next = newnode->_next;
-		cur = newlist;
+		cur->_next = tmep->_next;
+		if (cur->_next != NULL)
+			tmep->_next = cur->_next->_next;
+		cur = cur->_next;
+		tmep = tmep->_next;
 	}
 	return newlist;
 }
 
 
+void PrintComplexList(ComplexNode* plist)
+{
+	ComplexNode* cur = plist;
+	while (cur)
+	{
+		printf("%d:", cur->_data);
+		if (cur->_random != NULL)
+		{
+			printf("(%d)-->", cur->_random->_data);
+		}
+		else
+		{
+			printf("(NULL)-->");
+		}
+		cur = cur->_next;
+	}
+	printf("over\n");
+}
 

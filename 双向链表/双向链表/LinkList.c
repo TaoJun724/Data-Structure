@@ -1,14 +1,48 @@
 #include"LinkList.h"
 
 
+
+
+ListNode* BuyListNode(DataType x)
+{
+	ListNode* newNode = (ListNode*)malloc(sizeof(ListNode));//开辟新节点
+	if (NULL == newNode)
+	{
+		exit(EXIT_FAILURE);
+	}
+	newNode->data = x;
+	newNode->prev = NULL;
+	newNode->next = NULL;
+	return newNode;
+}
+
+
+
+
 void ListInit(List* lt)
 {
 	assert(lt);
-	lt->head->data = 0;
+	ListNode* head = BuyListNode(0);
+	lt->head = head;
 	lt->head->next = lt->head;
 	lt->head->prev = lt->head;
 }
 
+void ListDestory(List* lt)
+{
+	assert(lt);
+	ListNode*  cur = lt->head->next;
+	ListNode* del = NULL;
+	while (cur->next != lt->head)
+	{
+		del = cur;
+		cur = cur->next;
+		free(del);
+		del = NULL;
+	}
+	free(cur);
+	cur = NULL;
+}
 
 void ListPushBack(List* lt, DataType x)
 {
@@ -58,18 +92,6 @@ void ListPopFront(List* lt)
 	del->next->prev = lt->head;
 	free(del);
 }
-ListNode* BuyListNode(DataType x)
-{
-	ListNode* newNode = (ListNode*)malloc(sizeof(ListNode));//开辟新节点
-	if (NULL == newNode)
-	{
-		exit(EXIT_FAILURE);
-	}
-	newNode->data = x;
-	newNode->prev = NULL;
-	newNode->next = NULL;
-	return newNode;
-}
 
 
 void ListPrint(List* lt)
@@ -106,19 +128,7 @@ void ListErase(ListNode* pos)
 	del->next->prev = pos;
 	free(del);
 }
-void ListDestory(List* lt)
-{
-	assert(lt);
-	ListNode*  cur = lt->head->next;
-	ListNode* del = cur;
-	while (cur->next != lt->head)
-	{
-		del = cur;
-		cur = cur->next;
-		free(del);
-	}
-	free(cur);
-}
+
 
 int ListSize(List* lt)
 {

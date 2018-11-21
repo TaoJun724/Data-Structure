@@ -1,5 +1,10 @@
 #include<stdio.h>
 
+
+
+
+
+
 void Swap(int *a, int *b)
 {
 	int temp = *a;
@@ -33,32 +38,50 @@ void Select(int num[], int len)
 }
 
 
-void Select_OP(int arr[], int len)
+
+
+void SelectSort(int arr[], int len)
 {
-	int i = 0;
-	int k = 0;//保存无序区第一个元素下标，方便比较
-	//一趟确定一个有序区元素，最后一次不用确定，总共len-1次
-	for (i = 0; i < len - 1; i++)
+	int left = 0;
+	int right = len - 1;
+	while (left < right)
 	{
-		k = i;
+		int max = left;//记录无序区最大元素下标
+		int min = left;//记录无序区最小元素下标
 		int j = 0;
-		//确定无序区最小元素下标
-		for (j = i + 1; j < len; j++)
+		for (j = left + 1; j <= right; j++)
 		{
-			if (arr[j] < arr[k])
+			//找最大元素下标
+			if (arr[j] < arr[min])
 			{
-				k = j;
+				min = j;
+			}
+			//找最小元素下标
+			if (arr[j]>arr[max])
+			{
+				max = j;
 			}
 		}
-		//如果无序区第一个元素为最小，则没有必要交换
-		if (i != k)
+		//最小值如果是第一个则没有必要交换
+		if (min != left)
 		{
-			int tmp = arr[k];
-			arr[k] = arr[i];
-			arr[i] = tmp;
+			int tmp = arr[left];
+			arr[left] = arr[min];
+			arr[min] = tmp;
 		}
+		//这里很重要，如果最大元素下标是left,前面已经和最小元素交换了，此时最大元素下标应该是min
+		if (max == left)
+		{
+			max = min;
+		}
+		//最大值如果是最后一个则没必要交换
+		if (max != right)
+		{
+			int tmp = arr[right];
+			arr[right] = arr[max];
+			arr[max] = tmp;
+		}
+		left++;
+		right--;
 	}
 }
-
-
-
